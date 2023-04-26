@@ -83,10 +83,13 @@ public class CustomerController {
 		return ResponseEntity.ok(customerPageDTO);
 	}
 	
+	//get noOrder customers
 	@GetMapping("/unordered")
 	public ResponseEntity<List<CustomerResponseDTO>> getCustomersUnordered(){
 		List<CustomerResponseDTO> customerResponseDTOList = customerService.getUnorderedCustomers();
 		return ResponseEntity.ok(customerResponseDTOList);
 	}
+	
+	 
 
 }

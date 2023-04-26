@@ -18,7 +18,6 @@ import com.enoca.requestDTo.CustomerRequestDTO;
 import com.enoca.responseDTO.CustomerResponseDTO;
 import com.enoca.responseDTO.SearchCustomerResponseDTO;
 
-
 @Service
 public class CustomerService {
 
@@ -27,13 +26,11 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerMapper customerMapper;
-	
-	
 
-	//REGISTER CUSTOMER
+	// REGISTER CUSTOMER
 	public CustomerResponseDTO registerCustomer(CustomerRequestDTO customerRequestDTO) {
 
-		Customer customer = customerMapper.customerRequestDTOToCustomer(customerRequestDTO);//mapper kullandım
+		Customer customer = customerMapper.customerRequestDTOToCustomer(customerRequestDTO);// mapper kullandım
 
 		customerRepository.save(customer);// db'ye kayıt ettik
 
@@ -43,97 +40,92 @@ public class CustomerService {
 
 		return customerResponseDTO;
 	}
-	
-	//GET CUSTOMER WITH ID
+
+	// GET CUSTOMER WITH ID
 	public CustomerResponseDTO getCustomer(Long customerId) {
-		
-		Customer customer =  findCustomer(customerId);
-	
-		
+
+		Customer customer = findCustomer(customerId);
+
 		CustomerResponseDTO customerResponseDTO = customerMapper.customerToCustomerResponseDTO(customer);
-		
-		return customerResponseDTO;
-	}
-	
-	//UPDATE CUSTOMER
-	public CustomerResponseDTO updateCustomer(Long customerId, CustomerRequestDTO customerRequestDTO) {
-		
-		Customer customer =  findCustomer(customerId);//böyle bir customer var mı yok mu? varsa getir, yoksa hata fırlat
-		
-		customer.setAge(customerRequestDTO.getAge());
-		customer.setName(customerRequestDTO.getName());
-		
-		customerRepository.save(customer);
-		
-		CustomerResponseDTO customerResponseDTO = customerMapper.customerToCustomerResponseDTO(customer);
-		
+
 		return customerResponseDTO;
 	}
 
-	//FIND CUSTOMER WITH SEARCH
+	// UPDATE CUSTOMER
+	public CustomerResponseDTO updateCustomer(Long customerId, CustomerRequestDTO customerRequestDTO) {
+
+		Customer customer = findCustomer(customerId);// böyle bir customer var mı yok mu? varsa getir, yoksa hata fırlat
+
+		customer.setAge(customerRequestDTO.getAge());
+		customer.setName(customerRequestDTO.getName());
+
+		customerRepository.save(customer);
+
+		CustomerResponseDTO customerResponseDTO = customerMapper.customerToCustomerResponseDTO(customer);
+
+		return customerResponseDTO;
+	}
+
+	// DELETE CUSTOMER
+	public CustomerResponseDTO deleteCustomer(Long customerId) {
+
+		Customer customer = findCustomer(customerId);
+
+		customerRepository.delete(customer);
+
+		CustomerResponseDTO customerResponseDTO = customerMapper.customerToCustomerResponseDTO(customer);
+
+		return customerResponseDTO;
+	}
+
+	// FIND CUSTOMER WITH SEARCH
 	public Page<SearchCustomerResponseDTO> searchCustomerWithPage(Pageable pageable, String q) {
-		
+
 		Page<Customer> customerPage = customerRepository.searchAllProducts(q, pageable);
-		
-		List<Long> orderIds = new ArrayList<>();//customere ait order id'leri tutmak için bir list oluşturdum
-		
+
+		List<Long> orderIds = new ArrayList<>();// customere ait order id'leri tutmak için bir list oluşturdum
+
 		Page<SearchCustomerResponseDTO> customerResponseDTO = customerPage.map(customer -> {
-			
-			List<Order> cOrders= customer.getOrders();
-			
+
+			List<Order> cOrders = customer.getOrders();
+
 			for (Order w : cOrders) {
-				
-				orderIds.add(w.getId());//burada customer'ın order id'lerini listeme ekledim. (lambda ile de yapılabilirdi)
-				
+
+				orderIds.add(w.getId());// burada customer'ın order id'lerini listeme ekledim. (lambda ile de
+										// yapılabilirdi)
+
 			}
-			
+
 			SearchCustomerResponseDTO searchCustomerResponseDTO = new SearchCustomerResponseDTO();
-			
+
 			searchCustomerResponseDTO.setId(customer.getId());
 			searchCustomerResponseDTO.setName(customer.getName());
 			searchCustomerResponseDTO.setOrderId(orderIds);
-			
+
 			return searchCustomerResponseDTO;
 		});
-		
-		
+
 		return customerResponseDTO;
 	}
-	
-	
-	private Customer findCustomer(Long id) {
-		Customer customer = customerRepository.findById(id).orElseThrow(//optional döndüğü için hata mekanizması kullanmam gerekiyor
-																		//kendim bir hata döndürdüm kontrollü şekilde
-() -> new ResourceNotFoundException(ErrorMessage.CUSTOMER_NOT_FOUND_MESSAGE));
-		
+
+	public Customer findCustomer(Long id) {
+		Customer customer = customerRepository.findById(id).orElseThrow(// optional döndüğü için hata mekanizması
+																		// kullanmam gerekiyor
+																		// kendim bir hata döndürdüm kontrollü şekilde
+				() -> new ResourceNotFoundException(ErrorMessage.CUSTOMER_NOT_FOUND_MESSAGE));
+
 		return customer;
-		
+
 	}
 
-	public CustomerResponseDTO deleteCustomer(Long customerId) {
-		
-		Customer customer =  findCustomer(customerId);
-		
-		Customer c = customer;//silindikten sonra customer kaybolacağı için buraya geçici olarak koydum
-		
-		customerRepository.delete(customer);
-		
-		CustomerResponseDTO customerResponseDTO = customerMapper.customerToCustomerResponseDTO(c);
-		
-		return customerResponseDTO;
-	}
-
+	// List no-order customers
 	public List<CustomerResponseDTO> getUnorderedCustomers() {
-		
-		List<Customer> customersNoOrderList =  customerRepository.getCustomerNoOrder();
-		
+
+		List<Customer> customersNoOrderList = customerRepository.getCustomerNoOrder();
+
 		List<CustomerResponseDTO> dtoList = customerMapper.customerListToCustomerResponseDTOList(customersNoOrderList);
-		
+
 		return dtoList;
 	}
-
-
-
-
 
 }
