@@ -27,6 +27,8 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerMapper customerMapper;
+	
+	
 
 	//REGISTER CUSTOMER
 	public CustomerResponseDTO registerCustomer(CustomerRequestDTO customerRequestDTO) {
@@ -119,6 +121,15 @@ public class CustomerService {
 		CustomerResponseDTO customerResponseDTO = customerMapper.customerToCustomerResponseDTO(c);
 		
 		return customerResponseDTO;
+	}
+
+	public List<CustomerResponseDTO> getUnorderedCustomers() {
+		
+		List<Customer> customersNoOrderList =  customerRepository.getCustomerNoOrder();
+		
+		List<CustomerResponseDTO> dtoList = customerMapper.customerListToCustomerResponseDTOList(customersNoOrderList);
+		
+		return dtoList;
 	}
 
 

@@ -1,10 +1,13 @@
 package com.enoca.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import com.enoca.domain.Customer;
 import com.enoca.requestDTo.CustomerRequestDTO;
 import com.enoca.responseDTO.CustomerResponseDTO;
+
 
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
@@ -16,5 +19,7 @@ public interface CustomerMapper {
 	
 	@Mapping(target="orderList", ignore=true)
 	CustomerResponseDTO customerToCustomerResponseDTO(Customer customer);
+	
+	List<CustomerResponseDTO>  customerListToCustomerResponseDTOList(List<Customer> customerList );
 
 }
