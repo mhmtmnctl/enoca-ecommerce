@@ -128,4 +128,23 @@ public class OrderService {
 
 	}
 
+	// get orders with date parameter
+	public List<OrderResponseDTO> getOrdersWithDate(LocalDate date) {
+
+		List<Order> orderList = orderRepository.getOrdersWithDate(date);
+
+		List<OrderResponseDTO> dtoList = new ArrayList<>();
+
+		for (Order each : orderList) {
+
+			OrderResponseDTO orderResponseDTO = getOrderResponse(each);
+
+			dtoList.add(orderResponseDTO);
+
+		}
+
+		return dtoList;
+
+	}
+
 }
