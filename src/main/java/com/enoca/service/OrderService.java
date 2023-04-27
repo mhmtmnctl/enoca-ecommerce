@@ -42,7 +42,7 @@ public class OrderService {
 
 		// ön tarafa responseDto dönelim
 
-		OrderResponseDTO orderResponseDTO = getOrderResponse(order);
+		OrderResponseDTO orderResponseDTO = getOrderResponse(order);//aşağıdaki metodu kullandım.
 
 		return orderResponseDTO;
 	}
@@ -142,6 +142,9 @@ public class OrderService {
 			dtoList.add(orderResponseDTO);
 
 		}
+//		List<OrderResponseDTO> dtoList = orderList.stream()
+//                .map(this::getOrderResponse)
+//                .collect(Collectors.toList());
 
 		return dtoList;
 

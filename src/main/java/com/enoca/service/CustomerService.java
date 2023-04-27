@@ -2,12 +2,10 @@ package com.enoca.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.enoca.domain.Customer;
 import com.enoca.domain.Order;
 import com.enoca.exception.ResourceNotFoundException;
@@ -87,7 +85,7 @@ public class CustomerService {
 
 		Page<SearchCustomerResponseDTO> customerResponseDTO = customerPage.map(customer -> {
 
-			List<Order> cOrders = customer.getOrders();
+			List<Order> cOrders = customer.getOrders();//her bir müşterinin order'ını alıp listeye attım.
 
 			for (Order w : cOrders) {
 

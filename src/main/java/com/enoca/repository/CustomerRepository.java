@@ -24,7 +24,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	  tablodaki eşleşen kayıtları getirir ve sağ tablodaki eşleşmeyen kayıtlar için
 	  NULL değerleri döndürür. Bu nedenle, müşterilerin herhangi bir siparişi
 	  olmayanları da dahil ederek bir listeleme yapmak için "LEFT JOIN" kullanmamız
-	  gerekiyor.
+	  gerekiyor. From Customer dediğim için customer sol tarafta kalmış oluyor
 	 */
 	@Query("SELECT c FROM Customer c LEFT JOIN Order o ON o.customer = c WHERE o.id IS NULL")
 	List<Customer> getCustomerNoOrder();

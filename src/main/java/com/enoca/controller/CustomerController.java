@@ -1,9 +1,7 @@
 package com.enoca.controller;
 
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.enoca.requestDTo.CustomerRequestDTO;
 import com.enoca.responseDTO.CustomerResponseDTO;
 import com.enoca.responseDTO.SearchCustomerResponseDTO;
@@ -29,7 +26,7 @@ import com.enoca.service.CustomerService;
 @RequestMapping("/customer")
 public class CustomerController {
 
-	@Autowired
+	@Autowired //DI yapıyorum.
 	CustomerService customerService;
 
 	//Register Customer
@@ -74,7 +71,7 @@ public class CustomerController {
 			@RequestParam(required = false, defaultValue = "",name = "q") String q,//parametreyi q değişkenine atadım.
 			@RequestParam("page") int page,
 			@RequestParam("size") int size,
-			@RequestParam("sort") String prop, // neye göre sıralanacağı...
+			@RequestParam("sort") String prop, // neye göre sıralanacağı... name,id,age vs postmanden giriyorum
 		    @RequestParam(required = false, defaultValue = "DESC",name = "type") String type)
 
 	 {
